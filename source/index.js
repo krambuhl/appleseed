@@ -48,7 +48,7 @@ export default ({
 		});
 	}
 
-	subscriptions({ 
+	return subscriptions({ 
 		ui: cachedElements, 
 		state, 
 		pushUpdate, 

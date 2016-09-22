@@ -22,15 +22,23 @@ const init = ({ ui }) => ({
 });
 
 const subscriptions = ({ state, ui, pushUpdate, options }) => {
-    ui.el.addEventListener('click', ev => {
+    const elClick = ev => {
         if (ui.toggle.contains(ev.target)) pushUpdate('TOGGLE');
         if (ui.open.contains(ev.target)) pushUpdate('OPEN');
         if (ui.close.contains(ev.target)) pushUpdate('CLOSE');
-    });
-  
-    ui.body.addEventListener('click', ev => {
+    };
+
+    const bodyClick = ev => {
         if (!ui.el.contains(ev.target)) pushUpdate('TOGGLE', false);
-    })
+    };
+
+    ui.el.addEventListener('click', elClick);
+    ui.body.addEventListener('click', bodyClick);
+    
+    return () => {
+        ui.el.removeEventListener('click', elClick);
+        ui.body.removeEventListener('click', bodyClick);
+    }
 }
 
 const update = ({ message, state, lastState, options }) => {
@@ -66,7 +74,59 @@ export default createComponent({
 
 ```js
 import toggler from './toggler';
-toggler(document.querySelector('.toggler'), {  });
+
+// creating a component returns a 
+// function to unsubscribe event listeners
+const unsubscribeToggler = toggler(document.querySelector('.toggler'), {  });
+
+// remove event listeners to effectively 
+// stop the component from behaving
+unsubscribeToggler();
+```
+
+## Docs
+
+### Types
+
+```elm
+ui : { 
+    el : DomNode, 
+    options : Maybe Object 
+} => Dict { String : DomNode }
+
+init : { 
+    ui : Dict { String : DomNode } 
+} => Object
+
+subscriptions : { 
+    state : Object, 
+    ui : Object, 
+    pushUpdate : Function, 
+    options : Object 
+} => Function 
+
+update : { 
+    message : String, 
+    state : Object, 
+    lastState : Object, 
+    options : Object 
+} => Function
+
+view : { 
+    ui : Dict { String : DomNode }, 
+    update : Object, 
+    lastState: Object, 
+    history : List (List String), 
+    options : Object 
+}
+
+createComponent : { 
+    ui : Maybe Function,
+    init : Maybe Function, 
+    subscriptions : Maybe Function
+    update : Maybe Function,
+    view : Maybe Function
+}
 ```
 
 ## Install 
