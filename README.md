@@ -1,33 +1,39 @@
 # Appleseed
 
-Implements a minimal version of the Elm data model using javascript.
+A lightweight implementation of the Elm data model using javascript.
 
 ## Example
+
+### Definition
 
 ```js
 import createComponent from 'appleseed';
 
-export const ui = ({ el, options }) => ({
+const ui = ({ el, options }) => ({
     el: el,
-    toggle: el.querySelector('.js-toggle'),
-    close: el.querySelector('.js-close'),
-    open: el.querySelector('.js-open'),
+    toggle: el.querySelector('.block__toggle'),
+    close: el.querySelector('.block__close'),
+    open: el.querySelector('.block__open'),
     body: document.body
 });
 
-export const init = ({ ui }) => ({
+const init = ({ ui }) => ({
     isOpen: ui.el.classList.contains('is-open')
 });
 
-export const subscriptions = ({ state, ui, pushUpdate, options }) => {
+const subscriptions = ({ state, ui, pushUpdate, options }) => {
     ui.el.addEventListener('click', ev => {
-        if (el.toggle.contains(ev.target)) pushUpdate('TOGGLE');
-        if (el.open.contains(ev.target)) pushUpdate('OPEN');
-        if (el.close.contains(ev.target)) pushUpdate('CLOSE');
+        if (ui.toggle.contains(ev.target)) pushUpdate('TOGGLE');
+        if (ui.open.contains(ev.target)) pushUpdate('OPEN');
+        if (ui.close.contains(ev.target)) pushUpdate('CLOSE');
     });
+  
+    ui.body.addEventListener('click', ev => {
+        if (!ui.el.contains(ev.target)) pushUpdate('TOGGLE', false);
+    })
 }
 
-export const update = ({ message, state, lastState, options }) => {
+const update = ({ message, state, lastState, options }) => {
     switch(message) {
         case 'OPEN': 
             return () => ({ isOpen: true });
@@ -37,13 +43,12 @@ export const update = ({ message, state, lastState, options }) => {
 
         case 'TOGGLE': 
             return (open = !state.isOpen) => ({ isOpen: open });
-
-        default: return () => ({ })
     }
 }
 
-export const view = ({ ui, update, state, lastState, options }) => {
-    if (update.isOpen !== undefined) {
+const view = ({ ui, update, state, lastState, history, options }) => {
+    if (update.isOpen !== undefined) { 
+        // only update if the data has been updated
         ui.el.classList.toggle('is-open', state.isOpen);
     }
 }
@@ -55,6 +60,13 @@ export default createComponent({
     update, 
     view 
 });
+```
+
+### Useage
+
+```js
+import toggler from './toggler';
+toggler(document.querySelector('.toggler'), {  });
 ```
 
 ## Install 
