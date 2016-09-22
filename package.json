@@ -1,0 +1,25 @@
+{
+  "name": "appleseed",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "develop": "babel source -w -d dist --presets es2015",
+    "build": "babel source -d dist --presets es2015",
+    "test": "tape tests/**/*.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/krambuhl/appleseed.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/krambuhl/appleseed/issues"
+  },
+  "homepage": "https://github.com/krambuhl/appleseed#readme",
+  "devDependencies": {
+    "babel-cli": "^6.14.0",
+    "babel-preset-es2015": "^6.14.0"
+  }
+}
