@@ -23,12 +23,16 @@ export default ({
 			message, 
 			state, 
 			lastState, 
-			options 
+			history,
+			options,
+			pushUpdate 
 		});
 
 		// run the patch function to get the data 
 		// needed to update the state
-		const patch = typeof patchFn === 'function' ? patchFn(...args) : {};
+		const patchRes = typeof patchFn === 'function' ? patchFn(...args) : {};
+		const patch = patchRes === undefined ? {} : patchRes;
+
 
 		// mutate the application state by applying
 		// the patch to the current state data
